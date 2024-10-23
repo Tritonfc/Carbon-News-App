@@ -1,4 +1,4 @@
-package com.tobe.newsapp.util
+package com.tobe.carbonnewsapp.util
 
 sealed class Resource<T>(
     val data: T? = null,
