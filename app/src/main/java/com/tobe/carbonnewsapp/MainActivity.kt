@@ -22,11 +22,14 @@ import com.tobe.carbonnewsapp.navigation.Routes
 import com.tobe.carbonnewsapp.ui.news.NewsScreen
 import com.tobe.carbonnewsapp.ui.saved.SavedScreen
 import com.tobe.carbonnewsapp.ui.theme.CarbonNewsAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
         setContent {
             CarbonNewsAppTheme {
                 // Main screen content with scaffold
@@ -82,9 +85,7 @@ fun NavigationHost(navController: NavHostController, modifier: Modifier = Modifi
 // News Screen composable
 fun NavGraphBuilder.addNewsComposable(navController: NavHostController) {
     composable(Routes.News.route) {
-        NewsScreen(articles = emptyList(), onSearch = {
-
-        }, onBookmarkClicked = {
+        NewsScreen(  onBookmarkClicked = {
 
         })
     }
