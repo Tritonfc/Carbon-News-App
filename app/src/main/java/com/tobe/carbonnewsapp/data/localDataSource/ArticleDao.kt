@@ -7,7 +7,7 @@ import com.tobe.carbonnewsapp.data.models.Article
 @Dao
 interface ArticleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-     suspend fun insert(article: Article)
+     suspend fun upsert(article: Article)
 
      @Query("SELECT * FROM articles")
      suspend fun getAllArticles():List<Article>

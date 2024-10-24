@@ -13,7 +13,7 @@ class NewsRepository  @Inject constructor(private val newsApi: NewsApi, private 
         newsApi.searchForNews(searchQuery, pageNumber)
 
     suspend fun insertNewsArticle(article: Article){
-        articleDao.insert(article)
+        articleDao.upsert(article)
     }
 
     suspend fun fetchOfflineArticles() = articleDao.getAllArticles()

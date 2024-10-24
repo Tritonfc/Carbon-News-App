@@ -43,16 +43,19 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.tobe.carbonnewsapp.data.models.Article
 import com.tobe.carbonnewsapp.util.Resource
+import kotlinx.coroutines.launch
 
 @Composable
 fun NewsScreen(
     modifier: Modifier = Modifier,
     viewModel: NewsViewModel = hiltViewModel(),
-    onBookmarkClicked: (Article) -> Unit // Add bookmark handler
+    onArticleClicked: (Article) -> Unit // Add bookmark handler
 ) {
     // Collecting the breaking news and search news flow states
     val breakingNewsState by viewModel.breakingNewsFlow.collectAsStateWithLifecycle()
     val searchNewsState by viewModel.searchNewsFlow.collectAsStateWithLifecycle()
+
+    val scope = rememberCoroutineScope()
 
     // Combine breaking news and searched news into one list for display
     val articles = when {
@@ -70,7 +73,14 @@ fun NewsScreen(
     NewsScreenContent(
         articles = articles,
         onSearch = { viewModel.updateSearchQuery(it) },
-        onBookmarkClicked = onBookmarkClicked,
+        onArticleClicked = { article->
+            scope.launch{
+                viewModel.saveArticleOffline(article)
+            }
+
+            onArticleClicked(article)
+
+        },
         modifier = modifier,
         breakingNewsState = breakingNewsState,
         searchNewsState = searchNewsState
@@ -83,7 +93,7 @@ fun NewsScreenContent(
     onSearch: (String) -> Unit,
     breakingNewsState: Resource<List<Article>>,
     searchNewsState: Resource<List<Article>>,
-    onBookmarkClicked: (Article) -> Unit,
+    onArticleClicked: (Article) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("") )}
@@ -137,7 +147,7 @@ fun NewsScreenContent(
                         items(articles) { article ->
                             NewsCard(
                                 article = article,
-                                onBookmarkClicked = onBookmarkClicked,
+                                onArticleClicked = onArticleClicked,
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
@@ -177,10 +187,11 @@ fun SearchBar(
 fun NewsCard(
     article: Article,
     modifier: Modifier = Modifier,
-    isBookmarked: Boolean = false,
-    onBookmarkClicked: (Article) -> Unit = {}
+
+    onArticleClicked: (Article) -> Unit = {}
 ) {
     Card(
+        onClick = {onArticleClicked(article)},
         modifier = modifier.padding(horizontal = 8.dp, vertical = 16.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
@@ -203,43 +214,31 @@ fun NewsCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             // Row containing the title, author, and bookmark icon
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+            // Column for Title and Author
+            Column(
+                modifier = Modifier
+
+                    .padding(end = 8.dp)
             ) {
-                // Column for Title and Author
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp)
-                ) {
-                    // News Title
-                    Text(
-                        text = article.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                // News Title
+                Text(
+                    text = article.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
 
-                    Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
-                    // Author
-                    Text(
-                        text = "By ${article.author}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                // Author
+                Text(
+                    text = "By ${article.author}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
-                // Bookmark Icon
-                IconButton(
-                    onClick = { onBookmarkClicked(article) }
-                ) {
-                    Icon(
-                        imageVector = if (isBookmarked) Icons.Filled.Star else Icons.Outlined.Star,
-                        contentDescription = if (isBookmarked) "Remove Bookmark" else "Add Bookmark"
-                    )
-                }
+            // Bookmark Icon
             }
         }
-    }
+
 }

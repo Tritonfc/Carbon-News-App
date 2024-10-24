@@ -1,6 +1,17 @@
 package com.tobe.carbonnewsapp.navigation
 
-sealed class Routes(val route: String, val label: String) {
-    object News : Routes("news", "News")
-    object Saved : Routes("saved", "Saved")
-}
+
+import com.tobe.carbonnewsapp.data.models.Article
+import kotlinx.serialization.Serializable
+
+
+@Serializable
+object News
+
+@Serializable
+object Saved
+
+
+@Serializable
+data class ViewArticle(val article: String)
+
