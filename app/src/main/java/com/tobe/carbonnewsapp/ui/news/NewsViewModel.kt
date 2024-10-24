@@ -67,7 +67,12 @@ private val _searchNewsFlow = MutableStateFlow<Resource<List<Article>>>(Resource
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = Resource.Loading()
             )
+fun saveArticleOffline(article: Article){
+    viewModelScope.launch(Dispatchers.IO){
+        newsRepository.insertNewsArticle(article)
+    }
 
+}
 
    private suspend fun searchNews(query: String, pageNumber: Int = 1) {
         _searchNewsFlow.value = Resource.Loading() // Emit loading state

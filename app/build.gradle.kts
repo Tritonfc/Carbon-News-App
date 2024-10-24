@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.hilt.android)
 }
@@ -57,6 +58,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.retrofit)
     implementation(libs.room.runtime)
+    implementation(libs.kotlin.serialization)
     implementation(libs.coil.compose)
 
     implementation(libs.coil.http)
