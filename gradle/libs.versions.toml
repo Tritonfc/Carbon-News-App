@@ -7,9 +7,11 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 hilt = "2.51.1"
+hilt_compose = "1.2.0"
 lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.8.0"
 retrofit = "2.11.0"
+glide = "1.0.0-beta01"
 nav_version = "2.8.3"
 room_version = "2.6.1"
 composeBom = "2024.04.01"
@@ -37,8 +39,12 @@ room-compiler= {group= "androidx.room",name="room-compiler",version.ref= "room_v
 room-ktx= {group= "androidx.room",name="room-ktx",version.ref= "room_version"}
 navigation-compose = {group= "androidx.navigation", name="navigation-compose",version.ref="nav_version"}
 coil-compose = {group="io.coil-kt.coil3",name = "coil-compose",version.ref="coil_version"}
+coil-http = {group="io.coil-kt.coil3",name = "coil-network-okhttp",version.ref="coil_version"}
+coil3 = {group="io.coil-kt.coil3",name = "coil",version.ref="coil_version"}
+glide = {group = "com.github.bumptech.glide",name="compose",version.ref="glide"}
 hilt-android = {group= "com.google.dagger",name="hilt-android",version.ref="hilt"}
 hilt-android-compiler = {group= "com.google.dagger",name="hilt-android-compiler",version.ref="hilt"}
+hilt-compose = {group = "androidx.hilt",name="hilt-navigation-compose",version.ref = "hilt_compose"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
